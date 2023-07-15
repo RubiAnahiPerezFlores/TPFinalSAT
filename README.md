@@ -14,24 +14,37 @@ Una vez definido el problema con el que se va a trabajar, es relevante mencionar
 Se decidió plantear un modelo de análisis de abandono de clientes, se tuvieron en cuenta ciertas características de los clientes que pueden llegar a influir en la continuacion o abandono del cliente:
 
 RowNumber (Numero de fila)
-CustomerId (Identificación del cliente)
-Surname (Apellido)
-CreditScore (Puntaje crediticio)
-Geography (Geografía)
-Gender (Género)
-Age (Edad)
-Tenure (Tenencia)
-Balance (Balance)
-NumOfProducts (Número de Productos)
-HasCrCard (TieneCrCard)
-IsActiveMember (EsMiembroActivo)
-EstimatedSalary (Salario Estimado)
-Exited (Salido)
 
-(en este caso, un clasificador binario ya que tenemos 2 clases –‘abandona’ y ‘no abandona’) para aprender de los datos ya que se muestran menos casos de la clase ‘abandona’.
-Tener demasiadas características cuando podemos llegar a un modelo lo suficientemente bueno (recuerda, nunca tendremos un modelo perfecto) con menos características es una pérdida de tiempo y potencia de cómputo.
-Esto es especialmente crítico si pensamos en una de las preguntas clave de nuestro enfoque de abandono: “¿por qué mis clientes me abandonan?“. Si la respuesta se basa en cientos de factores, será extremadamente difícil hacerla comprensible para nuestros colegas o clientes al diseñar campañas de retención
-Tener modelos más simples (siempre y cuando funcionen lo suficientemente bien) suele ser mejor que los modelos demasiado complicados, ya que normalmente generalizan mejor con nuevos datos (funcionarán mejor contra los datos no vistos).
+CustomerId (Identificación del cliente)
+
+Surname (Apellido)
+
+CreditScore (Puntaje crediticio)
+
+Geography (Geografía)
+
+Gender (Género)
+
+Age (Edad)
+
+Tenure (Tenencia)
+
+Balance (Balance)
+
+NumOfProducts (Número de Productos)
+
+HasCrCard (TieneCrCard)
+
+IsActiveMember (EsMiembroActivo)
+
+EstimatedSalary (Salario Estimado)
+
+Exited (Salido) En este caso, es un clasificador binario ya que tenemos 2 clases –‘abandona’ y ‘no abandona’
+
+Luego del análisis se buscará estar en condiciones para identificar si efectivamente estos atributos afecta, o tiene una influencia en la decisión del cliente de abandonar o no la empresa.
+
+Analisis realizado:
+
 
 Lo primero que haremos será obtener nuestro dataset de ejemplo. Hay muchos datasets sobre abandono de clientes
 este caso lo tendremos en formato CSV. Se trata de un dataset sobre dato de abandono de clientes en una entidad bancaria.
@@ -57,6 +70,11 @@ Una de las columnas que puede ser importante en el análisis puede ser Edad. Vem
 
 Para las variables categóricas (aquellas no-numéricas que representan categorías, como “Género” o “País”) podemos crear histogramas en vez de boxplots para representar la distribución de los valores.
 
+
+
+Tener demasiadas características cuando podemos llegar a un modelo lo suficientemente bueno (recuerda, nunca tendremos un modelo perfecto) con menos características es una pérdida de tiempo y potencia de cómputo.
+Esto es especialmente crítico si pensamos en una de las preguntas clave de nuestro enfoque de abandono: “¿por qué mis clientes me abandonan?“. Si la respuesta se basa en cientos de factores, será extremadamente difícil hacerla comprensible para nuestros colegas o clientes al diseñar campañas de retención
+Tener modelos más simples (siempre y cuando funcionen lo suficientemente bien) suele ser mejor que los modelos demasiado complicados, ya que normalmente generalizan mejor con nuevos datos (funcionarán mejor contra los datos no vistos).
 
 ¿Quién?
 Sabiendo qué clientes son más propensos a irse podemos diseñar campañas de retención y evitar su abandono.
