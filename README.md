@@ -43,42 +43,41 @@ Exited (Salido) En este caso, es un clasificador binario ya que tenemos 2 clases
 
 Luego del análisis se buscará estar en condiciones para identificar si efectivamente estos atributos afecta, o tiene una influencia en la decisión del cliente de abandonar o no la empresa.
 
-Analisis realizado:
+4.Analisis realizado:
 
+Para hacernos una idea breve de cómo se relacionan nuestros datos con nuestro label (la columna “Exited”, que marca si ese cliente se fue del banco o no) vamos a explorar visualmente los datos con algunos gráficos básicos.
 
-Lo primero que haremos será obtener nuestro dataset de ejemplo. Hay muchos datasets sobre abandono de clientes
-este caso lo tendremos en formato CSV. Se trata de un dataset sobre dato de abandono de clientes en una entidad bancaria.
+Así podremos empezar a tener una idea de qué atributos pueden ser importantes a la hora de predecir el abandono. Esta exploración de variables puede ser mucho más compleja, pero es importante hacerla de manera al menos de un modo básico porque nos puede dar pistas sobre varios puntos fundamentales de aquí en adelante como por ejemplo:
 
-Nuestro dataset, nuestro tesoro
-Una vez descargado y puesto en la carpeta adecuada (en nuestro caso, la carpeta “data” pero puede ser cualquiera a vuestra elección), procederemos a cargarlo y, como hacemos habitualmente en procesos de Machine Learning, dar un primer vistazo a los datos con los que trabajamos. Además, vamos a eliminar algunas variables que ya sabemos que tendremos y que no nos van a interesar por ser irrelevantes (como el apellido del cliente) o que no aportarán al modelo predictor de abandono por ser identificadores. Esto es un caso habitual en datasets de todo tipo, donde tenemos datos MUY detallados (teléfonos, IDs, etc.) que sabemos automáticamente que no van a aportar.
+  - Qué atributos pueden ser importantes por sí mismos (si ayudan a diferenciar claramente los clientes que abandonan de los que no)
+  - Qué atributos pueden ser útiles para generar atributos compuestos para incrementar el rendimiento del algoritmo
+  - Potenciales problemas de calidad de datos
+  - Presencia de nulos
 
+4. 1  Una de las columnas que puede ser importante en el análisis puede ser Edad. 
 
-Tenemos varios atributos como la edad de los clientes, la antiguedad, el número de productos, etc. Todos potencialmente interesantes para analizar y predecir el abandono de los clientes. Además de una previsualización de los datos, también es importante saber la forma de los mismos: cuántas filas y columnas tenemos disponibles. Además vamos a crear unas cuantas variables que nos serán útiles a lo largo de la exploración.
+Vemos que al segmentarla por el label, diferencia los casos 0 (no abandona) y 1 (abandona) de manera significativa. 
 
+Sin embargo, el hecho de que por sí misma diferencie el label no es una garantía de que al entrenar nuestro modelo de predicción de abandono tenga una gran importancia, ya que la mayoría de los modelos de Machine Learning actuales se aprovechan de las relaciones entre atributos además de su importancia individual.
 
-No es un dataset muy masivo, 10.000 filas y 11 columnas. Habitualmente los datasets de sistemas reales pueden ser bastante más ricos en atributos, desde las decenas de atributos hasta los miles (especialmente si generamos atributos automáticamente). Aún siendo relativamente pocas filas y columnas es imposible analizar 10.000 filas manualmente.
+4.2  Para las variables categóricas (aquellas no-numéricas que representan categorías, como “Género” o “País”) podemos crear histogramas en vez de boxplots para representar la distribución de los valores.
 
-Exploración visual del dato
-Para hacernos una idea breve de cómo se relacionan nuestros datos con nuestro label (la columna “Exited”, que marca si ese cliente se fue del banco o no) vamos a explorar visualmente los datos con algunos gráficos básicos. Así podremos empezar a tener una idea de qué atributos pueden ser importantes a la hora de predecir el abandono. Esta exploración de variables puede ser mucho más compleja, pero es importante hacerla de manera al menos de un modo básico porque nos puede dar pistas sobre varios puntos fundamentales de aquí en adelante:
-Qué atributos pueden ser importantes por sí mismos (si ayudan a diferenciar claramente los clientes que abandonan de los que no)
-Qué atributos pueden ser útiles para generar atributos compuestos para incrementar el rendimiento del algoritmo
-Potenciales problemas de calidad de datos
-Presencia de nulos
-Presencia de categorías muy dominantes en atributos de tipo texto
-Presencia de valores extremos y qué tipo de distribuciones tenemos: ¿son muy compactas? ¿muy dispersas?
-Una de las columnas que puede ser importante en el análisis puede ser Edad. Vemos que al segmentarla por el label, diferencia los casos 0 (no abandona) y 1 (abandona) de manera significativa. Sin embargo, el hecho de que por sí misma diferencie el label no es una garantía de que al entrenar nuestro modelo de predicción de abandono tenga una gran importancia, ya que la mayoría de los modelos de Machine Learning actuales se aprovechan de las relaciones entre atributos además de su importancia individual.
+En un primera instacia no parece que estos atributos segmenten bien el hecho de que un cliente abandone a la empresa.
 
-Para las variables categóricas (aquellas no-numéricas que representan categorías, como “Género” o “País”) podemos crear histogramas en vez de boxplots para representar la distribución de los valores.
+4.3 Como vemos, esta codificación sólo nos traduce de texto a números. Esto hace que ahora el modelo pueda entrenar con éstas variables. Sin embargo, no suele ser la mejor manera de codificar porque da a entender al modelo que hay una relación de magnitud (como la hay entre los números) y esto no es cierto en muchos casos.
 
+Además de codificar también hemos partido el dato en dos conjuntos, entrenamiento y test. Entrenamiento tiene 7000 filas y test 3000 para poder medir el rendimiento de nuestro modelo con dato que nunca haya visto (como los nuevos clientes que tenga que analizar cuando lo estemos usando en producción en la empresa).
 
+4.4 Nuestro primer modelo de análisis de abandono de clientes
 
-Tener demasiadas características cuando podemos llegar a un modelo lo suficientemente bueno (recuerda, nunca tendremos un modelo perfecto) con menos características es una pérdida de tiempo y potencia de cómputo.
-Esto es especialmente crítico si pensamos en una de las preguntas clave de nuestro enfoque de abandono: “¿por qué mis clientes me abandonan?“. Si la respuesta se basa en cientos de factores, será extremadamente difícil hacerla comprensible para nuestros colegas o clientes al diseñar campañas de retención
-Tener modelos más simples (siempre y cuando funcionen lo suficientemente bien) suele ser mejor que los modelos demasiado complicados, ya que normalmente generalizan mejor con nuevos datos (funcionarán mejor contra los datos no vistos).
+ Ahora que ya tenemos el dato separado en entrenamiento y test y con la forma adecuada para que trabajar con él. Vamos a usar un bosque de decisión (la combinación de muchos árboles de decisión individuales) por ser un modelo potente y robusto, rápido de entrenar y con una fácil interpetación.
+Una vez entrenado, usaremos el conjunto de test para evaluar el rendimiento de nuestro modelo prediciendo qué clientes abandonarán nuestro negocio y cuáles no.
+En este caso, la detección de aquellos casos que SÍ abandonan, y dada la codificación de del label (0 -> se queda / 1 -> abandona) se busca ver Precision (abandonos predichos correctamente / (abandonos predichos correctamente + abandonos falsamente predichos)). 
+Las métricas son bastante buenas si vemos el acierto (accuracy) del 87%. Pero si vemos la precision tenemos un valor de 46%, no es tan buena como parecía en un principio.
 
-¿Quién?
-Sabiendo qué clientes son más propensos a irse podemos diseñar campañas de retención y evitar su abandono.
-¿Por qué?
-Estas campañas de retención deben centrarse en áreas clave de nuestro negocio. Conocer las razones por las que los clientes que probablemente abandonan nuestro negocio nos ayudará a dirigirnos a los perfiles adecuados y diseñar acciones.
+Conclusion
+El abandono de clientes se basa en cientos de factores,se consider que tener modelos más simples (siempre y cuando funcionen lo suficientemente bien) suele ser mejor que los modelos demasiado complicados, ya que normalmente generalizan mejor con nuevos datos (funcionarán mejor contra los datos no vistos).
+Sabiendo qué clientes son más propensos a irse se pueden diseñar campañas de retención y evitar su abandono.
+Se recomienda conocer las razones por las que los clientes que probablemente abandonan asi se dirige la atención a los perfiles adecuados y diseñar acciones correpondientes.
 
 
